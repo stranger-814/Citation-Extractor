@@ -40,5 +40,5 @@ Citation Extractor is a simple web application that fetches citations from an AP
 ## Output:
 ![alt text](image.png)
 
-##Contributor 
+## Contributor 
 Sandesh Lingayat
