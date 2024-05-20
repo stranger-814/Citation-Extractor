@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citation Extractor</title>
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .citation-container {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .citation-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+        .citation-id {
+            color: #555;
+        }
+        .citation-subid {
+            color: #555;
+        }
+        .citation-link {
+            color: #007bff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Citation Extractor</h1>
+        <div id="citationsContainer"></div>
+    </div>
+
+    <script>
+        function fetchCitations() {
+            fetch('/get_citations')
+            .then(response => response.json())
+            .then(data => {
+                const citationsContainer = document.getElementById('citationsContainer');
+                citationsContainer.innerHTML = '';
+                data.forEach(citation => {
+                
+                    const citationDiv = document.createElement('div');
+                    citationDiv.classList.add('citation-container');
+
+                    citationDiv.innerHTML = `
+                        <div class="citation-header">ID: <span class="citation-id">${citation.id}</span></div>
+                        <div class="citation-header">Response:</div>
+                        <p>${citation.response}</p>
+                        <div class="citation-header">Citations:</div>
+                        <ul>
+                            ${citation.citations.map(subcitation => `
+                                <li>
+                                    SubID: <span class="citation-subid">${subcitation.subid}</span> - <a href="${subcitation.link}" class="citation-link">${subcitation.link}</a>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    `;
+
+                    citationsContainer.appendChild(citationDiv);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching citations:', error);
+            });
+        }
+
+        window.onload = fetchCitations;
+    </script>
+</body>
+</html>
